@@ -72,15 +72,15 @@ class SeleniumFactory:
                 desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
             elif parse.getBrowser() == 'htmlunit':
                 desired_capabilities = webdriver.DesiredCapabilities.HTMLUNIT
-            elif parse.getBrowser() == 'internet explorer':
+            elif parse.getBrowser() == 'iexplorer':
                 desired_capabilities = webdriver.DesiredCapabilities.INTERNETEXPLORER
             elif parse.getBrowser() == 'iphone':
                 desired_capabilities = webdriver.DesiredCapabilities.IPHONE
             else:
                 desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
                       
-            desired_capabilities['version'] = parse.getBrowserVersion()
-            desired_capabilities['platform'] = parse.getOS()
+            desired_capabilities['version'] = '6' #parse.getBrowserVersion()
+            desired_capabilities['platform'] = 'XP' #parse.getOS()
             desired_capabilities['name'] = parse.getJobName()
             
             command_executor="http://%s:%s@%s:%s/wd/hub"%(parse.getUserName(), parse.getAccessKey(), os.environ['SELENIUM_HOST'],os.environ['SELENIUM_PORT'])
