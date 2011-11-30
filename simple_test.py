@@ -7,7 +7,7 @@ from SeleniumFactory import *
 
 class testParseSauceURL(unittest.TestCase):
 	def setUp(self):
-		self.url = "sauce-ondemand:?username=foobar&access-key=1234-5678-9102-3456&job-name=Trading Engine - Trading Engine Trunk - UAT - Firefox Linux-81&os=Linux&browser=firefox&browser-version=7&firefox-profile-url=&max-duration=300&idle-timeout=90&user-extensions-url="
+		self.url = "sauce-ondemand:?username=foobar&access-key=1234-5678-9102-3456&job-name=simple test&os=Linux&browser=firefox&browser-version=7&firefox-profile-url=&max-duration=300&idle-timeout=90&user-extensions-url="
 
 	def test_parse(self):
 		parse = ParseSauceURL(self.url)	
