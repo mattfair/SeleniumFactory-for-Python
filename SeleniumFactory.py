@@ -32,7 +32,6 @@ class SeleniumFactory:
         if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_URL' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])  
             driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON(), os.environ['SELENIUM_URL'])
-            driver.s
             driver.set_timeout(90000)
             
             return driver
