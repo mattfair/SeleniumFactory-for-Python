@@ -25,15 +25,15 @@ class SeleniumFactory:
     
     """
      Uses a driver specified by the 'SELENIUM_DRIVER' environment variable,
-     and run the test against the domain specified in 'SELENIUM_STARTING_URL' system property or the environment variable.
+     and run the test against the domain specified in 'SELENIUM_URL' system property or the environment variable.
      If no variables exist, a local Selenium driver is created.
     """
     def create(self):
-        if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_STARTING_URL' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:
+        if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_URL' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])  
-            driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON(), os.environ['SELENIUM_STARTING_URL'])
-            driver.start()
-            #driver.set_timeout(90000)
+            driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON(), os.environ['SELENIUM_URL'])
+            driver.s
+            driver.set_timeout(90000)
             
             return driver
         else:
@@ -49,7 +49,7 @@ class SeleniumFactory:
      If no variables exist, a local Selenium web driver is created.
     """
     def createWebDriver(self):
-        if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:            
+        if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_URL' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:            
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])    
   
             desired_capabilities = {}
@@ -77,6 +77,7 @@ class SeleniumFactory:
             print command_executor
             
             driver=webdriver.Remote(desired_capabilities=desired_capabilities, command_executor=command_executor)
+            driver.get(os.environ['SELENIUM_URL'])
             
             return driver
             
