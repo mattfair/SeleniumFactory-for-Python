@@ -30,10 +30,11 @@ class testSelenium2(unittest.TestCase):
     					
     def test_get(self):
       	self.browser.get("http://amazon.com")
-        assert "Amazon.com" in self.browser.title()
+        assert "Amazon.com" in self.browser.title
     
     def tearDown(self):
-    	self.browser.close()
+    	self.browser.quit()
+    	
  
 class testSelenium1(unittest.TestCase):
     def setUp(self):

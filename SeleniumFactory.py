@@ -79,9 +79,19 @@ class SeleniumFactory:
             else:
                 desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
                       
-            desired_capabilities['version'] = '6' #parse.getBrowserVersion()
-            desired_capabilities['platform'] = 'XP' #parse.getOS()
-            desired_capabilities['name'] = parse.getJobName()
+            desired_capabilities['version'] = parse.getBrowserVersion()
+            
+            #work around for name issues in Selenium 2
+            if 'Windows 2003' in parse.getOS():
+                desired_capabilities['platform'] = 'XP'
+            elif 'Windows 2008' in parse.getOS():
+                desired_capabilities['platform'] = 'VISTA'
+            elif 'Linux' in parse.getOS():
+                desired_capabilities['platform'] = 'LINUX'
+            else:
+                desired_capabilities['platform'] = parse.getOS()
+                
+            desired_capabilities['name'] = parse.getJobName() + '- Selenium 2'
             
             command_executor="http://%s:%s@%s:%s/wd/hub"%(parse.getUserName(), parse.getAccessKey(), os.environ['SELENIUM_HOST'],os.environ['SELENIUM_PORT'])
             print desired_capabilities
