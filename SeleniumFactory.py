@@ -29,14 +29,19 @@ class SeleniumFactory:
      If no variables exist, a local Selenium driver is created.
     """
     def create(self):
+        if 'SELENIUM_URL' not in os.environ:
+            startingUrl = "http://saucelabs.com"
+        else:
+            startingUrl = os.environ['SELENIUM_URL']
+        
         if 'SELENIUM_DRIVER' in os.environ and  'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])  
-            driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON())
+            driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON(), startingUrl)
             driver.set_timeout(90000)
             
             return driver
         else:
-            driver = selenium("localhost", 4444, "*firefox", "http://google.com/")
+            driver = selenium("localhost", 4444, "*firefox", startingUrl)
             driver.start()
             driver.set_timeout(90000)
             
@@ -48,6 +53,12 @@ class SeleniumFactory:
      If no variables exist, a local Selenium web driver is created.
     """
     def createWebDriver(self):
+        
+        if 'SELENIUM_URL' not in os.environ:
+            startingUrl = "http://saucelabs.com"
+        else:
+            startingUrl = os.environ['SELENIUM_URL']
+        
         if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:            
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])    
   
@@ -76,7 +87,7 @@ class SeleniumFactory:
             print command_executor
             
             driver=webdriver.Remote(desired_capabilities=desired_capabilities, command_executor=command_executor)
-            #driver.get(os.environ['SELENIUM_URL'])
+            driver.get(startingUrl)
             
             return driver
             
