@@ -38,13 +38,19 @@ class SeleniumFactory:
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])  
             driver = selenium(os.environ['SELENIUM_HOST'], os.environ['SELENIUM_PORT'], parse.toJSON(), startingUrl)
             driver.start()
-            driver.set_timeout(90000)
+            
+            if parse.getMaxDuration() == 0:
+                driver.set_timeout(90000)
             
             return driver
         else:
             driver = selenium("localhost", 4444, "*firefox", startingUrl)
             driver.start()
-            driver.set_timeout(90000)
+            
+            if parse.getMaxDuration() == 0:
+                driver.set_timeout(300)
+            else:
+                driver.set_timeout(parse.getMaxDuration())
             
             return driver
 
@@ -99,6 +105,19 @@ class SeleniumFactory:
             command_executor="http://%s:%s@%s:%s/wd/hub"%(parse.getUserName(), parse.getAccessKey(), os.environ['SELENIUM_HOST'],os.environ['SELENIUM_PORT'])
             print desired_capabilities
             print command_executor
+            
+            #make sure the test doesn't run forever if if the test crashes
+            if parse.getMaxDuration() == 0:
+                desired_capabilities['max-duration'] = 300     
+                desired_capabilities['command-timeout'] = 300
+            else:
+                desired_capabilities['max-duration'] = parse.getMaxDuration()
+                desired_capabilities['command-timeout'] = parse.getMaxDuration()
+            
+            if parse.getIdleTimeout() == 0:
+                desired_capabilities['idle-timeout'] = 90
+            else:
+                desired_capabilities['idle-timeout'] = parse.getIdleTimeout()
             
             driver=webdriver.Remote(desired_capabilities=desired_capabilities, command_executor=command_executor)
             driver.get(startingUrl)
