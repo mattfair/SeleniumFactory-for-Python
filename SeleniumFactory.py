@@ -29,10 +29,10 @@ class SeleniumFactory:
      If no variables exist, a local Selenium driver is created.
     """
     def create(self):
-        if 'SELENIUM_URL' not in os.environ:
+        if 'SELENIUM_STARTING_URL' not in os.environ:
             startingUrl = "http://saucelabs.com"
         else:
-            startingUrl = os.environ['SELENIUM_URL']
+            startingUrl = os.environ['SELENIUM_STARTING_URL']
         
         if 'SELENIUM_DRIVER' in os.environ and  'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])  
@@ -55,10 +55,10 @@ class SeleniumFactory:
     """
     def createWebDriver(self):
         
-        if 'SELENIUM_URL' not in os.environ:
+        if 'SELENIUM_STARTING_URL' not in os.environ:
             startingUrl = "http://saucelabs.com"
         else:
-            startingUrl = os.environ['SELENIUM_URL']
+            startingUrl = os.environ['SELENIUM_STARTING_URL']
         
         if 'SELENIUM_DRIVER' in os.environ and 'SELENIUM_HOST' in os.environ and 'SELENIUM_PORT' in os.environ:            
             parse = ParseSauceURL(os.environ["SELENIUM_DRIVER"])    
@@ -81,18 +81,21 @@ class SeleniumFactory:
                       
             desired_capabilities['version'] = parse.getBrowserVersion()
             
-            #work around for name issues in Selenium 2
-            if 'Windows 2003' in parse.getOS():
-                desired_capabilities['platform'] = 'XP'
-            elif 'Windows 2008' in parse.getOS():
-                desired_capabilities['platform'] = 'VISTA'
-            elif 'Linux' in parse.getOS():
-                desired_capabilities['platform'] = 'LINUX'
+            if 'SELENIUM_PLATFORM' in os.environ:
+                desired_capabilities['platform'] = os.environ['SELENIUM_PLATFORM']
             else:
-                desired_capabilities['platform'] = parse.getOS()
+                #work around for name issues in Selenium 2
+                if 'Windows 2003' in parse.getOS():
+                    desired_capabilities['platform'] = 'XP'
+                elif 'Windows 2008' in parse.getOS():
+                    desired_capabilities['platform'] = 'VISTA'
+                elif 'Linux' in parse.getOS():
+                    desired_capabilities['platform'] = 'LINUX'
+                else:
+                    desired_capabilities['platform'] = parse.getOS()
                 
-            desired_capabilities['name'] = parse.getJobName() + '- Selenium 2'
-            
+            desired_capabilities['name'] = parse.getJobName()
+                        
             command_executor="http://%s:%s@%s:%s/wd/hub"%(parse.getUserName(), parse.getAccessKey(), os.environ['SELENIUM_HOST'],os.environ['SELENIUM_PORT'])
             print desired_capabilities
             print command_executor
