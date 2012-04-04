@@ -115,7 +115,7 @@ class SeleniumFactory:
                 desired_capabilities = webdriver.DesiredCapabilities.FIREFOX
             elif parse.getBrowser() == 'htmlunit':
                 desired_capabilities = webdriver.DesiredCapabilities.HTMLUNIT
-            elif parse.getBrowser() == 'iexplorer':
+            elif parse.getBrowser() == 'iexplore':
                 desired_capabilities = webdriver.DesiredCapabilities.INTERNETEXPLORER
             elif parse.getBrowser() == 'iphone':
                 desired_capabilities = webdriver.DesiredCapabilities.IPHONE
